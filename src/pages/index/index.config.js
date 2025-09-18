@@ -1,3 +1,4 @@
-export default definePageConfig({
-  navigationBarTitleText: '首页'
-})
+export default {
+  navigationBarTitleText: '邀请函',
+  navigationStyle: 'custom'
+}

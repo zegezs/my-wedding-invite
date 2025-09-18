@@ -1,843 +1,245 @@
+/* 超精简版婚礼邀请函样式 - 全屏适配刘海屏 */
+
+/* 主容器 - 完全占满全屏 */
 .index {
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  perspective: 2000px;
-}
-
-/* 3D请柬容器 */
-.invitation-container {
-  position: relative;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform-style: preserve-3d;
-  perspective: 2000px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ea668b 0%, #bf2b39 100%);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* 移除容器级别的安全区域内边距，让背景图片完全铺满 */
+  /* 优化渲染性能 */
+  transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 请柬书脊 */
-.invitation-spine {
-  position: absolute;
-  width: 8px;
-  height: 400px;
-  background: linear-gradient(145deg, #8b4513, #654321);
-  border-radius: 4px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  z-index: 5;
-  transform: translateZ(2px);
-  transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* 主内容区域 - 完全占满整个屏幕 */
+.main {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-.invitation-spine.open {
-  transform: translateZ(-5px) scaleY(1.1);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-}
-
-/* 请柬左页 */
-.invitation-left-page {
-  position: absolute;
-  width: 300px;
-  height: 400px;
-  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-  border-radius: 20px 0 0 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform-style: preserve-3d;
-  transform-origin: right center;
-  transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-  left: calc(50% - 150px);
-  backface-visibility: hidden;
-}
-
-.invitation-left-page.open {
-  transform: rotateY(-180deg) translateX(150px) translateZ(-10px);
-  box-shadow: -20px 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* 请柬右页 */
-.invitation-right-page {
-  position: absolute;
-  width: 300px;
-  height: 400px;
-  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-  border-radius: 0 20px 20px 0;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform-style: preserve-3d;
-  transform-origin: left center;
-  transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-  right: calc(50% - 150px);
-  backface-visibility: hidden;
-}
-
-.invitation-right-page.open {
-  transform: rotateY(180deg) translateX(-150px) translateZ(-10px);
-  box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* 左右页内容 */
-.left-page-content, .right-page-content {
+/* 页面容器 - 适配刘海屏安全区域 */
+.page {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+  justify-content: center;
+  /* 移除容器级别的内边距，由 cover-overlay 处理安全区域 */
+  box-sizing: border-box;
 }
 
-.left-page-content .cover-decoration,
-.right-page-content .cover-decoration {
-  margin-bottom: 30px;
-  animation: float3D 3s ease-in-out infinite;
-  transform-style: preserve-3d;
-}
-
-.left-page-content .decoration-text,
-.right-page-content .decoration-text {
-  font-size: 60px;
-  display: block;
-  animation: rotate3D 4s linear infinite;
-  transform-style: preserve-3d;
-}
-
-.left-page-content .cover-title,
-.right-page-content .cover-title {
-  .main-title {
-    font-size: 36px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 15px;
-    display: block;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  .subtitle {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.9);
-    display: block;
-    font-weight: 300;
-  }
-}
-
-/* 请柬内容 */
-.invitation-content {
-  position: absolute;
+/* 页面内容 */
+.page-content {
   width: 100%;
-  height: 100vh;
-  background: white;
-  transform-style: preserve-3d;
-  transform: rotateY(180deg) translateX(150px);
-  opacity: 0;
-  transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 5;
+  max-width: 600rpx;
+  text-align: center;
+  color: white;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.8);
+}
+
+/* 封面页 - 适配全屏显示 */
+.cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-.invitation-content.show {
-  transform: rotateY(0deg) translateX(0px);
-  opacity: 1;
-}
-
-/* Swiper样式 */
-.invitation-swiper {
-  width: 100%;
-  height: 100vh;
-  transform-style: preserve-3d;
-}
-
-/* 音乐控制按钮 */
-.music-control {
+.cover-bg-image {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  object-fit: cover;
+  object-position: center;
+  /* 确保背景图片完全铺满整个屏幕，包括刘海区域 */
+  /* 不设置任何安全区域内边距，让图片完全覆盖 */
+}
+
+.cover-overlay {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  /* 内容区域在安全区域内，避免被刘海遮挡 */
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.couple {
+  font-size: 36rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin: 20rpx 0 10rpx 0;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.8);
+}
+
+.english-names, .date, .english-date, .time, .subtitle, .quote {
+  margin-bottom: 15rpx;
+  text-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.7);
+}
+
+.english-names {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.date {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+}
+
+.english-date, .quote {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+.time, .subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.quote {
+  line-height: 1.6;
+  max-width: 500rpx;
+  margin-bottom: 30rpx;
+}
+
+/* 新人照片展示 */
+.couple-photos {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  margin: 40rpx 0;
+  gap: 30rpx;
+  flex-wrap: wrap;
 }
 
-.music-control:active {
-  transform: scale(0.95);
+.photo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(255, 215, 0, 0.3);
+  transition: transform 0.2s ease;
 }
 
-.music-icon {
-  font-size: 24px;
-  transition: all 0.3s ease;
+.photo-item:active {
+  transform: scale(0.98);
 }
 
-.music-icon.playing {
-  animation: musicPulse 1.5s infinite;
+.person-photo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3rpx solid rgba(255, 215, 0, 0.6);
+  margin-bottom: 15rpx;
+}
+
+.person-name {
+  font-size: 24rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin-bottom: 5rpx;
+  text-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.7);
+}
+
+.person-english {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  text-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.7);
+}
+
+.heart {
+  font-size: 48rpx;
   color: #ff6b6b;
 }
 
-@keyframes musicPulse {
-  0%, 100% { 
-    transform: scale(1); 
-    opacity: 1;
-  }
-  50% { 
-    transform: scale(1.3); 
-    opacity: 0.8;
-  }
-}
-
-/* 翻页容器 */
-.page-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  position: relative;
-  perspective: 1000px;
-  transform-style: preserve-3d;
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.page-container.animating {
-  transform: rotateX(-15deg) translateY(30px) scale(0.95);
-  opacity: 0.7;
-}
-
-/* 页面内容通用样式 */
-.page-content {
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  animation: pageEnter 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-@keyframes pageEnter {
-  0% {
-    opacity: 0;
-    transform: rotateX(90deg) translateZ(-100px) scale(0.8);
-  }
-  50% {
-    opacity: 0.7;
-    transform: rotateX(45deg) translateZ(-50px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: rotateX(0deg) translateZ(0px) scale(1);
-  }
-}
-
-/* 3D翻页效果 */
-@keyframes pageFlipOut {
-  0% {
-    transform: rotateX(0deg) translateZ(0px);
-    opacity: 1;
-  }
-  50% {
-    transform: rotateX(-90deg) translateZ(-50px);
-    opacity: 0.5;
-  }
-  100% {
-    transform: rotateX(-180deg) translateZ(-100px);
-    opacity: 0;
-  }
-}
-
-@keyframes pageFlipIn {
-  0% {
-    transform: rotateX(180deg) translateZ(-100px);
-    opacity: 0;
-  }
-  50% {
-    transform: rotateX(90deg) translateZ(-50px);
-    opacity: 0.5;
-  }
-  100% {
-    transform: rotateX(0deg) translateZ(0px);
-    opacity: 1;
-  }
-}
-
-/* 封面页样式 */
-.cover-page {
-  .cover-decoration {
-    margin-bottom: 40px;
-    animation: float3D 4s ease-in-out infinite;
-    transform-style: preserve-3d;
+/* 响应式设计 - 小屏幕适配优化 */
+@media (max-width: 750rpx) {
+  .title {
+    font-size: 36rpx;
   }
   
-  .decoration-text {
-    font-size: 60px;
-    display: block;
-    transform-style: preserve-3d;
-    animation: rotate3D 6s linear infinite;
+  .couple-photos {
+    flex-direction: column;
+    gap: 20rpx;
+    margin: 30rpx 0;
   }
   
-  .title-container {
-    margin-bottom: 60px;
+  .photo-item {
+    width: 100%;
+    max-width: 400rpx;
   }
   
-  .main-title {
-    font-size: 48px;
-    font-weight: bold;
-    color: #d63384;
-    margin-bottom: 20px;
-    display: block;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .subtitle {
-    font-size: 18px;
-    color: #666;
-    font-weight: 300;
-    display: block;
-  }
-  
-  .swipe-hint {
-    position: absolute;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 2s forwards;
-  }
-  
-  .hint-text {
-    font-size: 14px;
-    color: #999;
-    margin-bottom: 10px;
-    display: block;
-  }
-  
-  .hint-arrow {
-    font-size: 24px;
-    color: #d63384;
-    animation: bounceDown 2s infinite;
+  .cover-overlay {
+    /* 小屏幕下的内边距调整 */
+    padding-top: max(env(safe-area-inset-top), 50rpx);
+    padding-bottom: max(env(safe-area-inset-bottom), 70rpx);
+    padding-left: max(env(safe-area-inset-left), 30rpx);
+    padding-right: max(env(safe-area-inset-right), 30rpx);
   }
 }
 
-@keyframes float3D {
-  0%, 100% { 
-    transform: translateY(0px) rotateX(0deg) rotateY(0deg); 
-  }
-  25% { 
-    transform: translateY(-8px) rotateX(5deg) rotateY(5deg); 
-  }
-  50% { 
-    transform: translateY(-15px) rotateX(0deg) rotateY(10deg); 
-  }
-  75% { 
-    transform: translateY(-8px) rotateX(-5deg) rotateY(5deg); 
+/* 适配刘海屏设备的特殊情况 */
+@media (orientation: portrait) and (max-width: 430px) {
+  .cover-overlay {
+    /* iPhone 14 Pro Max 等设备的特殊适配 */
+    padding-top: max(env(safe-area-inset-top), 44px);
+    padding-bottom: max(env(safe-area-inset-bottom), 60rpx);
+    padding-left: max(env(safe-area-inset-left), 20rpx);
+    padding-right: max(env(safe-area-inset-right), 20rpx);
   }
 }
 
-@keyframes rotate3D {
-  0% { 
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); 
-  }
-  25% { 
-    transform: rotateX(10deg) rotateY(90deg) rotateZ(5deg); 
-  }
-  50% { 
-    transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg); 
-  }
-  75% { 
-    transform: rotateX(-10deg) rotateY(270deg) rotateZ(-5deg); 
-  }
-  100% { 
-    transform: rotateX(0deg) rotateY(360deg) rotateZ(0deg); 
-  }
+/* 小程序全屏适配优化 */
+.index {
+  /* 小程序中的触摸优化 */
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  /* 防止内容选择 */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
-}
-
-@keyframes bounceDown {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(10px); }
-  60% { transform: translateY(5px); }
-}
-
-@keyframes pulse3D {
-  0%, 100% { 
-    transform: scale(1) rotateX(0deg) rotateY(0deg); 
-  }
-  50% { 
-    transform: scale(1.1) rotateX(5deg) rotateY(5deg); 
-  }
-}
-
-@keyframes wiggle3D {
-  0%, 100% { 
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); 
-  }
-  25% { 
-    transform: rotateX(5deg) rotateY(5deg) rotateZ(2deg); 
-  }
-  50% { 
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); 
-  }
-  75% { 
-    transform: rotateX(-5deg) rotateY(-5deg) rotateZ(-2deg); 
-  }
-}
-
-@keyframes rotateClock {
-  0% { 
-    transform: rotateZ(0deg) rotateX(0deg); 
-  }
-  100% { 
-    transform: rotateZ(360deg) rotateX(0deg); 
-  }
-}
-
-@keyframes bounceLocation {
-  0%, 100% { 
-    transform: translateY(0px) rotateX(0deg) rotateY(0deg); 
-  }
-  50% { 
-    transform: translateY(-10px) rotateX(10deg) rotateY(5deg); 
-  }
-}
-
-/* 人物页样式 */
-.person-page {
-  .person-avatar {
-    margin-bottom: 30px;
-    transform-style: preserve-3d;
-    animation: pulse3D 3s ease-in-out infinite;
-  }
-  
-  .avatar-icon {
-    font-size: 80px;
-    display: block;
-    transform-style: preserve-3d;
-    animation: wiggle3D 2s ease-in-out infinite;
-  }
-  
-  .person-info {
-    .person-title {
-      font-size: 32px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 15px;
-      display: block;
-    }
-    
-    .person-name {
-      font-size: 28px;
-      color: #d63384;
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-    
-    .person-desc {
-      font-size: 16px;
-      color: #666;
-      display: block;
-    }
-  }
-}
-
-/* 时间页样式 */
-.time-page {
-  .time-icon {
-    margin-bottom: 30px;
-    transform-style: preserve-3d;
-    animation: rotateClock 4s linear infinite;
-  }
-  
-  .icon-text {
-    font-size: 60px;
-    display: block;
-    transform-style: preserve-3d;
-  }
-  
-  .time-info {
-    .time-title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 20px;
-      display: block;
-    }
-    
-    .time-date {
-      font-size: 24px;
-      color: #d63384;
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-    
-    .time-time {
-      font-size: 20px;
-      color: #666;
-      display: block;
-    }
-  }
-}
-
-/* 地点页样式 */
-.location-page {
-  .location-icon {
-    margin-bottom: 30px;
-    transform-style: preserve-3d;
-    animation: bounceLocation 2s ease-in-out infinite;
-  }
-  
-  .icon-text {
-    font-size: 60px;
-    display: block;
-    transform-style: preserve-3d;
-  }
-  
-  .location-info {
-    .location-title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 20px;
-      display: block;
-    }
-    
-    .location-address {
-      font-size: 22px;
-      color: #d63384;
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-    
-    .location-detail {
-      font-size: 16px;
-      color: #666;
-      display: block;
-    }
-  }
-}
-
-/* 邀请页样式 */
-.invitation-page {
-  .invitation-content {
-    margin-bottom: 40px;
-  }
-  
-  .invitation-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    display: block;
-    line-height: 1.4;
-  }
-  
-  .invitation-subtitle {
-    font-size: 18px;
-    color: #666;
-    display: block;
-  }
-  
-  .invitation-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-}
-
-/* 慢动作出字效果 */
-.title-char {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-.title-char.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 翻页控制 */
-.page-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateZ(0);
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 10px 20px;
-  border-radius: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-  transform-style: preserve-3d;
-  transition: all 0.3s ease;
-  z-index: 20;
-}
-
-.page-controls:hover {
-  transform: translateX(-50%) translateY(-5px) translateZ(10px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-}
-
-.prev-btn, .next-btn {
-  padding: 12px 18px;
-  border-radius: 25px;
-  background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  cursor: pointer;
-  transform-style: preserve-3d;
-  position: relative;
-  overflow: hidden;
-}
-
-.prev-btn::before, .next-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.5s;
-}
-
-.prev-btn:hover::before, .next-btn:hover::before {
-  left: 100%;
-}
-
-.prev-btn:active, .next-btn:active {
-  transform: translateY(2px) scale(0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.prev-btn:hover, .next-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(145deg, #e9ecef, #dee2e6);
-}
-
-.prev-btn.disabled, .next-btn.disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.prev-btn.disabled:hover, .next-btn.disabled:hover {
-  transform: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.control-text {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-}
-
-.page-indicator {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateZ(0);
-  display: flex;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 15px 25px;
-  border-radius: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-  transform-style: preserve-3d;
-  transition: all 0.3s ease;
-  z-index: 20;
-}
-
-.page-indicator:hover {
-  transform: translateX(-50%) translateY(-5px) translateZ(10px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-}
-
-.indicator-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #ddd, #bbb);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-style: preserve-3d;
-  position: relative;
-  cursor: pointer;
-}
-
-.indicator-dot::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #d63384, #ff6b6b);
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease;
-}
-
-.indicator-dot:hover {
-  transform: translateY(-2px) scale(1.1);
-  box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
-}
-
-.indicator-dot.active {
-  background: linear-gradient(145deg, #d63384, #ff6b6b);
-  transform: translateY(-3px) scale(1.3);
-  box-shadow: 0 6px 16px rgba(214, 51, 132, 0.4);
-}
-
-.indicator-dot.active::before {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* 按钮样式 */
-.btn-primary, .btn-secondary {
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  outline: none;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  min-width: 130px;
-  transform-style: preserve-3d;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary {
-  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-  color: white;
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-primary:active {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-}
-
-.btn-secondary {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
-  color: #333;
-  border: 2px solid #ddd;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.btn-secondary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-  transition: left 0.6s;
-}
-
-.btn-secondary:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 1), rgba(248, 249, 250, 1));
-}
-
-.btn-secondary:hover::before {
-  left: 100%;
-}
-
-.btn-secondary:active {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* 响应式设计 */
-@media (max-width: 375px) {
-  .page-container {
-    padding: 20px 15px;
-  }
-  
-  .cover-page .main-title {
-    font-size: 36px;
-  }
-  
-  .person-page .avatar-icon {
-    font-size: 60px;
-  }
-  
-  .time-page .icon-text,
-  .location-page .icon-text {
-    font-size: 50px;
-  }
-  
-  .page-controls {
-    bottom: 20px;
-    padding: 12px 20px;
-    gap: 15px;
-  }
-  
-  .control-text {
-    font-size: 12px;
-  }
-}
+/* 确保在各种设备上都能正常显示 */
+/* 移除冗余的安全区域处理，已在 cover-overlay 中统一处理 */

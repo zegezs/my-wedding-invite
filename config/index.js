@@ -4,7 +4,7 @@ import devConfig from './dev'
 import prodConfig from './prod'
 
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
-export default defineConfig(async (merge, { command, mode }) => {
+export default defineConfig(async (merge) => {
   const baseConfig = {
     projectName: 'my-wedding-invite',
     date: '2025-9-16',
@@ -21,7 +21,18 @@ export default defineConfig(async (merge, { command, mode }) => {
       "@tarojs/plugin-generator"
     ],
     defineConstants: {
+      ENABLE_INNER_HTML: 'true',
+      ENABLE_ADJACENT_HTML: 'true',
+      ENABLE_SIZE_APIS: 'true',
+      ENABLE_TEMPLATE_CONTENT: 'true',
+      ENABLE_MUTATION_OBSERVER: 'true',
+      ENABLE_CLONE_NODE: 'true',
+      ENABLE_CONTAINS: 'true'
     },
+    env: {
+      NODE_ENV: '"development"'
+    },
+    alias: {},
     copy: {
       patterns: [
       ],
@@ -34,23 +45,20 @@ export default defineConfig(async (merge, { command, mode }) => {
       postcss: {
         pxtransform: {
           enable: true,
-          config: {
-
-          }
+          config: {}
         },
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: false,
           config: {
-            namingPattern: 'module', // 转换模式，取值为 global/module
+            namingPattern: 'module',
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
-      },
+      }
     },
     h5: {
       publicPath: '/',
       staticDirectory: 'static',
-
       miniCssExtractPluginOption: {
         ignoreOrder: true,
         filename: 'css/[name].[hash].css',
@@ -62,9 +70,9 @@ export default defineConfig(async (merge, { command, mode }) => {
           config: {}
         },
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: false,
           config: {
-            namingPattern: 'module', // 转换模式，取值为 global/module
+            namingPattern: 'module',
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
@@ -74,17 +82,14 @@ export default defineConfig(async (merge, { command, mode }) => {
       appName: 'taroDemo',
       postcss: {
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: false
         }
       }
     }
   }
 
-
   if (process.env.NODE_ENV === 'development') {
-    // 本地开发构建配置（不混淆压缩）
     return merge({}, baseConfig, devConfig)
   }
-  // 生产构建配置（默认开启压缩混淆等）
   return merge({}, baseConfig, prodConfig)
 })
