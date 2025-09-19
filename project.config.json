@@ -3,6 +3,7 @@
   "projectname": "my-wedding-invite",
   "description": "小程序结婚请柬",
   "appid": "wx2c700380bc51f721",
+  
   "setting": {
     "urlCheck": true,
     "es6": false,

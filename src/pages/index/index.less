@@ -93,6 +93,24 @@
   box-sizing: border-box;
 }
 
+/* 加载提示 */
+.loading-tip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20rpx 40rpx;
+  border-radius: 30rpx;
+  z-index: 10;
+}
+
+.loading-text {
+  color: white;
+  font-size: 24rpx;
+  text-align: center;
+}
+
 .couple {
   font-size: 36rpx;
   color: #ffd700;
@@ -137,6 +155,83 @@
   line-height: 1.6;
   max-width: 500rpx;
   margin-bottom: 30rpx;
+}
+
+/* 控制按钮区域（音乐和分享） */
+.control-buttons {
+  margin-top: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30rpx;
+  flex-wrap: wrap;
+}
+
+/* 音乐控制按钮 */
+.music-btn {
+  background: rgba(255, 105, 180, 0.9);
+  color: white;
+  font-size: 26rpx;
+  font-weight: bold;
+  padding: 18rpx 35rpx;
+  border-radius: 50rpx;
+  border: none;
+  box-shadow: 0 6rpx 20rpx rgba(255, 105, 180, 0.3);
+  transition: all 0.2s ease;
+  min-width: 180rpx;
+  text-align: center;
+}
+
+.music-btn:active,
+.music-btn.btn-hover {
+  background: rgba(255, 105, 180, 1);
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.4);
+}
+
+/* 禁用状态 */
+.music-btn:disabled {
+  background: rgba(255, 105, 180, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  transform: none;
+  box-shadow: 0 2rpx 8rpx rgba(255, 105, 180, 0.2);
+}
+
+/* 分享按钮 */
+.share-btn {
+  background: rgba(255, 215, 0, 0.9);
+  color: #333;
+  font-size: 26rpx;
+  font-weight: bold;
+  padding: 18rpx 35rpx;
+  border-radius: 50rpx;
+  border: none;
+  box-shadow: 0 6rpx 20rpx rgba(255, 215, 0, 0.3);
+  transition: all 0.2s ease;
+  min-width: 180rpx;
+  text-align: center;
+}
+
+.share-btn:active,
+.share-btn.btn-hover {
+  background: rgba(255, 215, 0, 1);
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(255, 215, 0, 0.4);
+}
+
+/* 适配小屏幕 */
+@media (max-width: 750rpx) {
+  .control-buttons {
+    margin-top: 30rpx;
+    gap: 20rpx;
+  }
+  
+  .music-btn,
+  .share-btn {
+    font-size: 24rpx;
+    padding: 16rpx 30rpx;
+    min-width: 160rpx;
+  }
 }
 
 /* 新人照片展示 */
