@@ -17,20 +17,33 @@ export const weddingConfig = {
   // 婚礼信息
   wedding: {
     date: '2025年10月3日',
-    englishDate: 'October 1st, 2024',
+    englishDate: 'October 3st, 2024',
     time: '10:00 AM',
     location: '某某酒店宴会厅',
     address: '地址：某某市某某区某某路123号',
     
     // 图片配置
-    background: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/main.jpg', // 页面背景图
+    background: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/main.jpg', // 主页面背景图
     shareImage: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/red.jpg', // 分享专用图片
+    
+    // 各页面背景图片
+    backgrounds: {
+      invitation: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/main.jpg', // 邀请函背景
+      story: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/red.jpg', // 爱情故事背景
+      location: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/girl.jpg', // 交通指引背景
+      blessing: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/boy.jpg', // 祝福留言背景
+      thanks: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/main.jpg' // 感谢页面背景
+    },
     
     // 音乐配置
     music: {
-      src: 'https://www.w3schools.com/html/horse.mp3',
+      src: 'https://adc-lab-8vy6pdmg-twymyrs.oss-cn-beijing.aliyuncs.com/music.mp3',
+      // 备用音频源（本地或其他CDN）
+      fallbackSrc: 'https://music.163.com/song/media/outer/url?id=5308028.mp3',
       volume: 0.3,
-      loop: true
+      loop: true,
+      // 是否允许自动播放（建议设为false，由用户手动控制）
+      autoplay: false
     },
     
     // 文案配置

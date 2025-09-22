@@ -1,6 +1,28 @@
 /* 超精简版婚礼邀请函样式 - 全屏适配刘海屏 */
 
-/* 全局滑动优化 - 移除可能导致卡顿的全局样式 */
+/* 全局滑动优化 - 彻底禁用可能导致卡顿的效果 */
+
+/* 禁用页面切换时的所有动画 */
+.photo-swiper.swiping * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 优化页面切换性能 */
+.photo-swiper .swiper-slide {
+  /* 强制GPU加速 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
 
 /* 主容器 - 完全占满全屏 */
 .index {
@@ -18,17 +40,17 @@
   -webkit-transform: translate3d(0, 0, 0);
 }
 
-/* 照片轮播容器 - 优化滑动体验 */
+/* 照片轮播容器 - 深度性能优化，解决卡顿 */
 .photo-swiper {
   width: 100%;
   height: 100vh;
   position: relative;
-  /* 简化硬件加速 */
+  /* GPU硬件加速 */
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   /* 优化触摸滚动 */
   -webkit-overflow-scrolling: touch;
-  /* 减少重绘 */
+  /* 减少重绘和重排 */
   contain: layout style paint;
   /* 优化合成层 */
   isolation: isolate;
@@ -39,6 +61,20 @@
   backface-visibility: hidden;
   /* 减少重排 */
   transform-style: preserve-3d;
+  /* 禁用用户选择提升性能 */
+  -webkit-user-select: none;
+  user-select: none;
+  /* 优化触摸延迟 */
+  -webkit-tap-highlight-color: transparent;
+  /* 优化图片渲染 */
+  image-rendering: -webkit-optimize-contrast;
+  /* 减少内存占用 */
+  -webkit-transform-style: preserve-3d;
+  /* 强制开启硬件加速 */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  /* 优化层叠上下文 */
+  z-index: 1;
 }
 
 /* 主内容区域 - 完全占满整个屏幕 */
@@ -49,7 +85,7 @@
   position: relative;
 }
 
-/* 音乐控制按钮 */
+/* 音乐控制按钮 - 增强可见性 */
 .music-control {
   position: fixed;
   top: 40rpx;
@@ -65,6 +101,17 @@
   z-index: 100;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: none;
+  font-size: 40rpx;
+}
+
+.music-control:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.music-control:active {
+  transform: scale(0.95);
 }
 
 .music-control:hover {
@@ -93,7 +140,7 @@
   }
 }
 
-/* 分享控制按钮 */
+/* 分享控制按钮 - 调整位置，增强可见性 */
 .share-control {
   position: fixed;
   top: 40rpx;
@@ -101,51 +148,30 @@
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 20rpx rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6rpx 25rpx rgba(255, 107, 107, 0.4);
   z-index: 100;
-  font-size: 40rpx;
-  border: none;
+  font-size: 36rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
+  color: white;
 }
 
 .share-control:hover {
-  background: rgba(255, 255, 255, 1);
+  background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
   transform: scale(1.1);
+  box-shadow: 0 8rpx 30rpx rgba(255, 107, 107, 0.5);
 }
 
-/* 自动播放控制按钮 */
-.auto-play-control {
-  position: fixed;
-  top: 40rpx;
-  right: 240rpx;
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 20rpx rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.share-control:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 20rpx rgba(255, 107, 107, 0.6);
 }
 
-.auto-play-control:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.1);
-}
-
-.auto-play-icon {
-  font-size: 40rpx;
-  transition: all 0.3s ease;
-}
-
-/* 页面容器 - 完全占满屏幕，优化滑动 */
+/* 页面容器 - 深度优化滑动性能 */
 .page {
   width: 100vw;
   height: 100vh;
@@ -155,9 +181,21 @@
   /* 移除容器级别的内边距，让图片完全覆盖 */
   box-sizing: border-box;
   position: relative;
-  /* 简化硬件加速 */
+  /* GPU硬件加速 */
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 减少内存占用 */
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 /* 页面内容 */
@@ -168,13 +206,13 @@
   color: white;
 }
 
-/* 照片页面样式 - 优化滑动 */
+/* 照片页面样式 - 深度优化滑动性能 */
 .photo-page {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  /* 简化硬件加速 */
+  /* GPU硬件加速 */
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   /* 减少重绘 */
@@ -191,6 +229,11 @@
   /* 优化图片加载 */
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+  /* 减少内存占用 */
+  -webkit-transform-style: preserve-3d;
+  /* 强制开启硬件加速 */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 
 .photo-bg-image {
@@ -216,6 +259,7 @@
   transform-style: preserve-3d;
 }
 
+/* 页面覆盖层优化 - 简化毛玻璃效果 */
 .photo-overlay {
   position: absolute;
   top: 0;
@@ -238,6 +282,7 @@
   /* 简化硬件加速 */
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
+  /* 移除backdrop-filter以提升性能 */
 }
 
 .photo-content {
@@ -270,7 +315,7 @@
   margin: 0 auto;
 }
 
-/* 页面指示器 */
+/* 页面指示器优化 - 简化毛玻璃效果 */
 .page-indicator {
   position: fixed;
   bottom: 60rpx;
@@ -278,12 +323,12 @@
   transform: translateX(-50%);
   display: flex;
   gap: 20rpx;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   padding: 20rpx 40rpx;
   border-radius: 40rpx;
   box-shadow: 0 4px 20rpx rgba(0, 0, 0, 0.2);
   z-index: 100;
-  backdrop-filter: blur(10rpx);
+  /* 移除backdrop-filter以提升性能 */
 }
 
 .indicator-dot {
@@ -300,7 +345,859 @@
   transform: scale(1.2);
 }
 
-/* 文字动画效果 - 简化优化 */
+/* 邀请函页面样式 */
+.invitation-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitation-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.invitation-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 60rpx 40rpx;
+  border-radius: 30rpx;
+  border: 2rpx solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10rpx);
+}
+
+.invitation-title {
+  font-size: 60rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  color: #ffd700;
+  font-family: 'STKaiti', '楷体', serif;
+}
+
+.invitation-subtitle {
+  font-size: 36rpx;
+  margin-bottom: 40rpx;
+  opacity: 0.95;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.4;
+}
+
+.invitation-main {
+  margin-bottom: 40rpx;
+}
+
+.invitation-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  opacity: 0.9;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.invitation-footer {
+  margin-top: 40rpx;
+}
+
+.invitation-signature {
+  font-size: 26rpx;
+  color: #ffd700;
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 人物介绍页面样式 */
+.person-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.person-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: blur(8rpx);
+}
+
+.person-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 30%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.person-content {
+  text-align: center;
+  color: white;
+  max-width: 500rpx;
+}
+
+.person-avatar {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  margin: 0 auto 30rpx;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6rpx solid rgba(255, 215, 0, 0.8);
+}
+
+.avatar-border {
+  position: absolute;
+  top: -10rpx;
+  left: -10rpx;
+  right: -10rpx;
+  bottom: -10rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  animation: rotateBorder 3s linear infinite;
+}
+
+@keyframes rotateBorder {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.person-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  color: #ffd700;
+}
+
+.person-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  text-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.person-english {
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.9;
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.person-description {
+  font-size: 26rpx;
+  line-height: 1.6;
+  opacity: 0.8;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 爱情故事页面样式 */
+.story-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.story-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+  margin-top: 40rpx;
+}
+
+.story-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  color: #ffd700;
+}
+
+.story-subtitle {
+  font-size: 28rpx;
+  margin-bottom: 50rpx;
+  opacity: 0.9;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.timeline {
+  text-align: left;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 30rpx;
+  top: 0;
+  bottom: 0;
+  width: 4rpx;
+  background: linear-gradient(to bottom, #ffd700, rgba(255, 215, 0, 0.3));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 60rpx;
+  padding-left: 80rpx;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 20rpx;
+  top: 10rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #ffd700;
+  border: 4rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 20rpx rgba(255, 215, 0, 0.6);
+}
+
+.timeline-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30rpx;
+  border-radius: 15rpx;
+  border: 1rpx solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(5rpx);
+}
+
+.timeline-date {
+  font-size: 24rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.timeline-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+  color: white;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  display: block;
+}
+
+.timeline-desc {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
+/* 交通指引页面样式 */
+.location-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+}
+
+.location-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+}
+
+.location-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  color: #ffd700;
+}
+
+.location-subtitle {
+  font-size: 28rpx;
+  margin-bottom: 50rpx;
+  opacity: 0.9;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.location-info {
+  text-align: left;
+}
+
+.location-address {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30rpx;
+  border-radius: 15rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 215, 0, 0.3);
+}
+
+.address-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.address-value {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.address-detail {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  display: block;
+}
+
+.transport-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30rpx;
+  border-radius: 15rpx;
+  border: 1rpx solid rgba(255, 215, 0, 0.3);
+}
+
+.transport-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.transport-item {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  margin-bottom: 15rpx;
+  display: block;
+  padding-left: 20rpx;
+}
+
+/* 祝福留言页面样式 */
+.blessing-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blessing-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+}
+
+.blessing-content {
+  text-align: center;
+  color: #333;
+  max-width: 600rpx;
+  width: 100%;
+}
+
+.blessing-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  line-height: 1.2;
+  color: #e17055;
+}
+
+.blessing-subtitle {
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.8;
+  color: #636e72;
+  font-style: italic;
+}
+
+.blessing-description {
+  font-size: 26rpx;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+  color: #2d3436;
+}
+
+.blessing-form {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 40rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(225, 112, 85, 0.3);
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+  text-align: left;
+}
+
+.form-label {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #e17055;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.form-input, .form-textarea {
+  background: white;
+  border: 2rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 24rpx;
+  color: #333;
+  min-height: 60rpx;
+}
+
+.form-textarea {
+  min-height: 120rpx;
+}
+
+.input-placeholder, .textarea-placeholder {
+  color: #999;
+}
+
+.form-submit {
+  background: linear-gradient(135deg, #e17055, #f39c12);
+  color: white;
+  padding: 25rpx;
+  border-radius: 15rpx;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-submit:active {
+  transform: scale(0.98);
+}
+
+.submit-text {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 感谢页面样式 */
+.thanks-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thanks-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+}
+
+.thanks-content {
+  text-align: center;
+  color: #333;
+  max-width: 600rpx;
+  width: 100%;
+}
+
+.thanks-title {
+  font-size: 60rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  line-height: 1.2;
+  color: #e17055;
+}
+
+.thanks-subtitle {
+  font-size: 32rpx;
+  margin-bottom: 40rpx;
+  opacity: 0.8;
+  color: #636e72;
+  font-style: italic;
+}
+
+.thanks-content-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  margin-bottom: 40rpx;
+  color: #2d3436;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.thanks-quote {
+  font-size: 26rpx;
+  line-height: 1.6;
+  font-style: italic;
+  color: #e17055;
+  padding: 30rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 15rpx;
+  border-left: 6rpx solid #e17055;
+  margin-bottom: 40rpx;
+}
+
+.thanks-hearts {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.heart {
+  font-size: 48rpx;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.heart:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.heart:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes heartBeat {
+  0%, 50%, 100% {
+    transform: scale(1);
+  }
+  25%, 75% {
+    transform: scale(1.2);
+  }
+}
+
+
+.text-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ea668b 0%, #bf2b39 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+}
+
+.text-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+}
+
+.text-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  color: #ffd700;
+}
+
+.text-subtitle {
+  font-size: 32rpx;
+  margin-bottom: 50rpx;
+  opacity: 0.9;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.text-main {
+  margin-bottom: 40rpx;
+}
+
+.text-paragraph {
+  font-size: 28rpx;
+  line-height: 1.8;
+  margin-bottom: 30rpx;
+  opacity: 0.95;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.text-quote {
+  font-size: 24rpx;
+  line-height: 1.6;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  padding: 20rpx;
+  border-left: 4rpx solid #ffd700;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8rpx;
+  margin-top: 20rpx;
+}
+
+/* 婚礼详情页面样式 */
+.details-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.details-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+}
+
+.details-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  margin-bottom: 50rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  color: #ffd700;
+}
+
+.details-info {
+  margin-bottom: 40rpx;
+}
+
+.info-item {
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(255, 215, 0, 0.3);
+}
+
+.info-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+  color: #ffd700;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.info-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  color: white;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.info-value-en {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.info-address {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  margin-top: 8rpx;
+}
+
+.details-note {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  font-style: italic;
+  padding: 20rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12rpx;
+  border: 1rpx solid rgba(255, 215, 0, 0.3);
+}
+
+/* 响应式设计 - 文字页面小屏幕适配 */
+@media (max-width: 750rpx) {
+  .text-title, .details-title {
+    font-size: 46rpx;
+  }
+  
+  .text-subtitle {
+    font-size: 28rpx;
+  }
+  
+  .text-paragraph {
+    font-size: 26rpx;
+  }
+  
+  .text-quote {
+    font-size: 22rpx;
+  }
+  
+  .info-label {
+    font-size: 26rpx;
+  }
+  
+  .info-value {
+    font-size: 28rpx;
+  }
+  
+  .info-value-en, .info-address {
+    font-size: 22rpx;
+  }
+  
+  .details-note {
+    font-size: 26rpx;
+  }
+}
+
+
 .title-char {
   opacity: 0;
   transform: translate3d(0, 20rpx, 0);
@@ -314,17 +1211,12 @@
 }
 
 /* 显示动画 - 简化优化 */
+/* 页面元素显示效果优化 - 简化动画 */
 .show {
-  opacity: 0;
-  transform: translate3d(0, 30rpx, 0);
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+  opacity: 1;
+  /* 直接显示，移除动画 */
+  animation: none !important;
+  transition: none !important;
 }
 
 /* 滑动提示 - 已隐藏 */
@@ -364,7 +1256,7 @@
   text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.8);
 }
 
-/* 封面页 - 适配全屏显示 */
+/* 封面页 - 适配全屏显示 - 婚礼纪风格增强 */
 .cover {
   position: relative;
   width: 100%;
@@ -372,7 +1264,9 @@
   overflow: hidden;
 }
 
-.cover-bg-image {
+/* 背景图片统一优化 - 解决卡顿问题 */
+.cover-bg-image,
+.photo-bg-image {
   position: fixed;
   top: 0;
   left: 0;
@@ -381,8 +1275,158 @@
   z-index: 1;
   object-fit: cover;
   object-position: center;
+  /* 强化GPU加速 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 优化图片渲染 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+  /* 强制开启硬件加速 */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
   /* 确保背景图片完全铺满整个屏幕，包括刘海区域 */
   /* 不设置任何安全区域内边距，让图片完全覆盖 */
+}
+
+.photo-bg-image {
+  /* 特殊处理photo-bg-image的定位，优化动态加载 */
+  position: absolute;
+}
+
+/* 装饰元素 - 深度优化漂浮动画，减少卡顿 */
+.decorative-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  /* 优化渲染性能 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+}
+
+/* 浮动装饰元素 - 优化性能 */
+.floating-heart {
+  position: absolute;
+  font-size: 30rpx;
+  animation: floatHeart 8s linear infinite;
+  opacity: 0.6;
+  /* 优化动画性能 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 只对需要的属性开启GPU加速 */
+  will-change: transform, opacity;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+}
+
+.heart-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.heart-2 {
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.heart-3 {
+  top: 40%;
+  left: 80%;
+  animation-delay: 4s;
+}
+
+.floating-petals {
+  position: absolute;
+  font-size: 25rpx;
+  animation: floatPetals 10s linear infinite;
+  opacity: 0.5;
+  /* 优化动画性能 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 只对需要的属性开启GPU加速 */
+  will-change: transform, opacity;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+}
+
+.petal-1 {
+  top: 15%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.petal-2 {
+  bottom: 30%;
+  left: 10%;
+  animation-delay: 3s;
+}
+
+.petal-3 {
+  top: 70%;
+  right: 5%;
+  animation-delay: 5s;
+}
+
+/* 简化浮动动画 - 减少计算量 */
+@keyframes floatHeart {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate3d(0, -15rpx, 0);
+    opacity: 0.8;
+  }
+}
+
+@keyframes floatPetals {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(0, -10rpx, 0);
+    opacity: 0.7;
+  }
 }
 
 .cover-overlay {
@@ -394,17 +1438,382 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 30%,
+    rgba(0, 0, 0, 0.1) 70%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
   /* 内容区域在安全区域内，避免被刘海遮挡 */
-  padding-top: max(env(safe-area-inset-top), 60rpx);
-  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-top: max(env(safe-area-inset-top), 80rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 100rpx);
   padding-left: max(env(safe-area-inset-left), 40rpx);
   padding-right: max(env(safe-area-inset-right), 40rpx);
   text-align: center;
   box-sizing: border-box;
 }
+
+/* 主标题区域 - 禁用动画 */
+.main-title-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+  /* 禁用动画，直接显示 */
+  animation: none !important;
+}
+
+.title-decoration {
+  width: 60rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  margin: 0 30rpx;
+}
+
+.main-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.8);
+  color: #ffd700;
+  font-family: 'STKaiti', '楷体', serif;
+  letter-spacing: 8rpx;
+}
+
+/* 新人名字区域 - 禁用动画 */
+.couple-names-section {
+  margin-bottom: 50rpx;
+  /* 禁用动画，直接显示 */
+  animation: none !important;
+}
+
+.couple-main {
+  font-size: 44rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.8);
+  letter-spacing: 6rpx;
+}
+
+.couple-english {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  letter-spacing: 2rpx;
+}
+
+/* 日期时间区域 - 禁用动画 */
+.datetime-section {
+  margin-bottom: 60rpx;
+  /* 禁用动画，直接显示 */
+  animation: none !important;
+}
+
+.date-card {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30rpx 40rpx;
+  border-radius: 25rpx;
+  border: 2rpx solid rgba(255, 215, 0, 0.4);
+  backdrop-filter: blur(15rpx);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.date-chinese {
+  font-size: 32rpx;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+.date-english {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  margin-bottom: 12rpx;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+.time-info {
+  font-size: 26rpx;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+/* 新人头像区域 - 禁用动画 */
+.couple-avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50rpx;
+  gap: 40rpx;
+  /* 禁用动画，直接显示 */
+  animation: none !important;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.avatar-ring {
+  position: absolute;
+  top: -15rpx;
+  left: -15rpx;
+  right: -15rpx;
+  bottom: -15rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255, 215, 0, 0.6);
+  animation: rotateBorder 4s linear infinite;
+}
+
+.groom-avatar .avatar-ring {
+  border-color: rgba(135, 206, 250, 0.8);
+}
+
+.bride-avatar .avatar-ring {
+  border-color: rgba(255, 182, 193, 0.8);
+}
+
+@keyframes rotateBorder {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.avatar-photo {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.4);
+  margin-bottom: 15rpx;
+}
+
+.avatar-name {
+  font-size: 24rpx;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 5rpx;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+}
+
+.avatar-role {
+  font-size: 20rpx;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+}
+
+.love-symbol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.love-icon {
+  font-size: 50rpx;
+  animation: heartBeat 2s ease-in-out infinite;
+}
+
+.love-text {
+  font-size: 20rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin-top: 10rpx;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+}
+
+@keyframes heartBeat {
+  0%, 50%, 100% {
+    transform: scale(1);
+  }
+  25%, 75% {
+    transform: scale(1.2);
+  }
+}
+
+/* 邀请词区域 */
+.invitation-text-section {
+  margin-bottom: 40rpx;
+  animation: fadeInUp 1s ease-out 2s both;
+}
+
+.invitation-quote {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15rpx;
+  border-left: 4rpx solid #ffd700;
+  backdrop-filter: blur(5rpx);
+  display: block;
+}
+
+.invitation-message {
+  font-size: 28rpx;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+  letter-spacing: 2rpx;
+  display: block;
+}
+
+/* 操作提示 */
+.operation-hints {
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+  margin-bottom: 30rpx;
+  animation: fadeInUp 1s ease-out 2.5s both;
+}
+
+.hint-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15rpx 25rpx;
+  border-radius: 20rpx;
+  backdrop-filter: blur(5rpx);
+}
+
+.hint-icon {
+  font-size: 24rpx;
+  margin-right: 10rpx;
+}
+
+.hint-text {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+}
+
+/* 滚动指示器 */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInUp 1s ease-out 3s both;
+}
+
+.scroll-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #ffd700;
+  margin-bottom: 10rpx;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.scroll-line {
+  width: 2rpx;
+  height: 40rpx;
+  background: linear-gradient(to bottom, #ffd700, transparent);
+  margin-bottom: 10rpx;
+}
+
+.scroll-text {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+/* 通用动画 */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 - 小屏幕适配优化 */
+@media (max-width: 750rpx) {
+  .main-title {
+    font-size: 42rpx;
+    letter-spacing: 6rpx;
+  }
+  
+  .couple-main {
+    font-size: 38rpx;
+    letter-spacing: 4rpx;
+  }
+  
+  .couple-avatars {
+    gap: 30rpx;
+  }
+  
+  .avatar-photo {
+    width: 120rpx;
+    height: 120rpx;
+  }
+  
+  .operation-hints {
+    flex-direction: column;
+    gap: 20rpx;
+    align-items: center;
+  }
+  
+  .cover-overlay {
+    /* 小屏幕下的内边距调整 */
+    padding-top: max(env(safe-area-inset-top), 60rpx);
+    padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+    padding-left: max(env(safe-area-inset-left), 30rpx);
+    padding-right: max(env(safe-area-inset-right), 30rpx);
+  }
+}
+
+/* 适配刘海屏设备的特殊情况 */
+@media (orientation: portrait) and (max-width: 430px) {
+  .cover-overlay {
+    /* iPhone 14 Pro Max 等设备的特殊适配 */
+    padding-top: max(env(safe-area-inset-top), 44px);
+    padding-bottom: max(env(safe-area-inset-bottom), 60rpx);
+    padding-left: max(env(safe-area-inset-left), 20rpx);
+    padding-right: max(env(safe-area-inset-right), 20rpx);
+  }
+}
+
+/* 移除旧的封面样式 */
 
 /* 加载提示 */
 .loading-tip {
@@ -651,3 +2060,986 @@
 
 /* 确保在各种设备上都能正常显示 */
 /* 移除冗余的安全区域处理，已在 cover-overlay 中统一处理 */
+
+/* ====== 增强的背景图片页面样式 ====== */
+
+/* 邀请函页面样式 - 增强背景图片 */
+.invitation-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.invitation-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.7) blur(2rpx);
+}
+
+.invitation-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.decoration-corner {
+  position: absolute;
+  width: 80rpx;
+  height: 80rpx;
+  border: 3rpx solid rgba(255, 215, 0, 0.6);
+}
+
+.top-left {
+  top: 60rpx;
+  left: 60rpx;
+  border-right: none;
+  border-bottom: none;
+}
+
+.top-right {
+  top: 60rpx;
+  right: 60rpx;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bottom-left {
+  bottom: 60rpx;
+  left: 60rpx;
+  border-right: none;
+  border-top: none;
+}
+
+.bottom-right {
+  bottom: 60rpx;
+  right: 60rpx;
+  border-left: none;
+  border-top: none;
+}
+
+.floating-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-flower {
+  position: absolute;
+  font-size: 35rpx;
+  animation: floatFlower 8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.flower-1 {
+  top: 25%;
+  right: 15%;
+  animation-delay: 1s;
+}
+
+.flower-2 {
+  bottom: 30%;
+  left: 10%;
+  animation-delay: 3s;
+}
+
+.flower-3 {
+  top: 60%;
+  right: 20%;
+  animation-delay: 5s;
+}
+
+@keyframes floatFlower {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-15rpx) rotate(5deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-8rpx) rotate(-3deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-20rpx) rotate(8deg);
+    opacity: 0.9;
+  }
+}
+
+.invitation-overlay {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 60rpx);
+  padding-bottom: max(env(safe-area-inset-bottom), 80rpx);
+  padding-left: max(env(safe-area-inset-left), 40rpx);
+  padding-right: max(env(safe-area-inset-right), 40rpx);
+  box-sizing: border-box;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.invitation-content {
+  text-align: center;
+  color: white;
+  max-width: 600rpx;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 80rpx 60rpx;
+  border-radius: 40rpx;
+  border: 3rpx solid rgba(255, 215, 0, 0.4);
+  backdrop-filter: blur(20rpx);
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
+}
+
+.invitation-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.title-decoration-line {
+  width: 80rpx;
+  height: 3rpx;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  margin: 0 30rpx;
+}
+
+.invitation-title {
+  font-size: 64rpx;
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 8rpx rgba(0, 0, 0, 0.6);
+  line-height: 1.2;
+  color: #ffd700;
+  font-family: 'STKaiti', '楷体', serif;
+  letter-spacing: 10rpx;
+}
+
+.invitation-subtitle {
+  font-size: 36rpx;
+  margin-bottom: 50rpx;
+  opacity: 0.95;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.4;
+  letter-spacing: 4rpx;
+}
+
+.invitation-main {
+  margin-bottom: 50rpx;
+}
+
+.invitation-text {
+  font-size: 30rpx;
+  line-height: 1.8;
+  opacity: 0.9;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: justify;
+  text-justify: inter-ideograph;
+  letter-spacing: 2rpx;
+}
+
+.invitation-footer {
+  margin-top: 50rpx;
+}
+
+.signature-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-line {
+  width: 60rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  margin: 0 20rpx;
+}
+
+.invitation-signature {
+  font-size: 28rpx;
+  color: #ffd700;
+  font-style: italic;
+  text-shadow: 1rpx 1rpx 4rpx rgba(0, 0, 0, 0.5);
+  letter-spacing: 3rpx;
+}
+
+/* 爱情故事页面样式 - 增强背景图片 */
+.story-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.6) blur(3rpx);
+}
+
+.story-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.romantic-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-heart.story-heart-1 {
+  position: absolute;
+  top: 20%;
+  left: 15%;
+  font-size: 40rpx;
+  animation: floatRomantic 6s ease-in-out infinite;
+  animation-delay: 0.5s;
+  opacity: 0.8;
+}
+
+.floating-heart.story-heart-2 {
+  position: absolute;
+  bottom: 25%;
+  right: 20%;
+  font-size: 35rpx;
+  animation: floatRomantic 7s ease-in-out infinite;
+  animation-delay: 2s;
+  opacity: 0.7;
+}
+
+.floating-rose {
+  position: absolute;
+  font-size: 30rpx;
+  animation: floatRose 9s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.rose-1 {
+  top: 40%;
+  right: 10%;
+  animation-delay: 1.5s;
+}
+
+.rose-2 {
+  bottom: 40%;
+  left: 8%;
+  animation-delay: 4s;
+}
+
+@keyframes floatRomantic {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-20rpx) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes floatRose {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translateY(-10rpx) rotate(10deg);
+    opacity: 0.8;
+  }
+  66% {
+    transform: translateY(-15rpx) rotate(-5deg);
+    opacity: 0.7;
+  }
+}
+
+.story-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+}
+
+.story-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+/* 交通指引页面样式 - 增强背景图片 */
+.location-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.7) blur(2rpx);
+}
+
+.location-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.travel-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* 其他背景图片统一样式 */
+.invitation-bg-image,
+.story-bg-image,
+.location-bg-image,
+.blessing-bg-image,
+.thanks-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  object-fit: cover;
+  object-position: center;
+  /* 强化GPU加速 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 优化图片渲染 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+  /* 强制开启硬件加速 */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+/* 装饰元素通用优化 - 减少所有动画卡顿 */
+.invitation-decorations,
+.story-decorations,
+.location-decorations,
+.blessing-decorations,
+.thanks-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  /* 优化渲染性能 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 强制GPU加速 */
+  will-change: transform;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+}
+
+/* 所有浮动元素通用优化 - 禁用动画解决卡顿 */
+.floating-flower,
+.floating-rose,
+.floating-icon,
+.floating-star,
+.floating-wish,
+.floating-thank,
+.floating-sparkle {
+  position: absolute;
+  /* 禁用动画，只保留静态效果 */
+  animation: none !important;
+  /* 优化渲染性能 */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  /* 减少重绘 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 移除will-change，减少GPU负荷 */
+  will-change: auto;
+  /* 优化渲染性能 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 减少重排 */
+  transform-style: preserve-3d;
+}
+
+/* 浮动装饰元素的具体样式 - 禁用动画 */
+.floating-flower {
+  font-size: 32rpx;
+  opacity: 0.4;
+}
+
+.floating-rose {
+  font-size: 30rpx;
+  opacity: 0.3;
+}
+
+.floating-icon {
+  font-size: 40rpx;
+  opacity: 0.4;
+}
+
+.floating-star {
+  font-size: 35rpx;
+  opacity: 0.5;
+}
+
+.floating-wish {
+  font-size: 32rpx;
+  opacity: 0.4;
+}
+
+.floating-thank {
+  font-size: 38rpx;
+  opacity: 0.5;
+}
+
+.floating-sparkle {
+  font-size: 30rpx;
+  opacity: 0.6;
+}
+
+/* 简化元素位置定义 - 禁用动画延迟 */
+.flower-1 { top: 25%; left: 15%; }
+.flower-2 { top: 55%; right: 20%; }
+.flower-3 { bottom: 25%; right: 15%; }
+
+.rose-1 { top: 30%; right: 25%; }
+.rose-2 { bottom: 35%; left: 25%; }
+
+.story-heart-1 { top: 20%; left: 10%; }
+.story-heart-2 { bottom: 30%; right: 15%; }
+
+.icon-1 { top: 25%; right: 12%; }
+.icon-2 { bottom: 35%; left: 15%; }
+.icon-3 { top: 55%; left: 85%; }
+
+.star-1 { top: 20%; right: 18%; }
+.star-2 { bottom: 30%; left: 12%; }
+
+.wish-1 { top: 45%; right: 8%; }
+.wish-2 { bottom: 45%; left: 10%; }
+
+.thank-1 { top: 25%; left: 15%; }
+.thank-2 { bottom: 30%; right: 18%; }
+
+.sparkle-1 { top: 35%; left: 20%; }
+.sparkle-2 { bottom: 40%; right: 15%; }
+
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-12rpx) scale(1.1);
+    opacity: 1;
+  }
+}
+
+.location-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.location-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+/* 祝福留言页面样式 - 增强背景图片 */
+.blessing-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.8) blur(1rpx);
+}
+
+.blessing-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.wish-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-star {
+  position: absolute;
+  font-size: 35rpx;
+  animation: twinkle 3s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+.star-1 {
+  top: 20%;
+  right: 18%;
+  animation-delay: 0.5s;
+}
+
+.star-2 {
+  bottom: 30%;
+  left: 12%;
+  animation-delay: 1.5s;
+}
+
+.floating-wish {
+  position: absolute;
+  font-size: 32rpx;
+  animation: floatWish 8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.wish-1 {
+  top: 45%;
+  right: 8%;
+  animation-delay: 2s;
+}
+
+.wish-2 {
+  bottom: 45%;
+  left: 10%;
+  animation-delay: 4s;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes floatWish {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-10rpx) rotate(3deg);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translateY(-15rpx) rotate(-2deg);
+    opacity: 0.8;
+  }
+}
+
+.blessing-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.blessing-header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+/* 感谢页面样式 - 增强背景图片 */
+.thanks-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.7) blur(2rpx);
+}
+
+.thanks-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gratitude-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-thank {
+  position: absolute;
+  font-size: 38rpx;
+  animation: floatThank 6s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+.thank-1 {
+  top: 25%;
+  left: 15%;
+  animation-delay: 1s;
+}
+
+.thank-2 {
+  bottom: 30%;
+  right: 18%;
+  animation-delay: 3s;
+}
+
+.floating-sparkle {
+  position: absolute;
+  font-size: 30rpx;
+  animation: sparkle 4s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+.sparkle-1 {
+  top: 40%;
+  right: 12%;
+  animation-delay: 0.5s;
+}
+
+.sparkle-2 {
+  bottom: 40%;
+  left: 10%;
+  animation-delay: 2.5s;
+}
+
+@keyframes floatThank {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-18rpx) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.2) rotate(90deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.8) rotate(180deg);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.1) rotate(270deg);
+  }
+}
+
+.thanks-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.thanks-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+/* 低端设备性能优化 - 禁用所有动画和复杂效果 */
+@media (max-width: 750px), (max-height: 1334px) {
+  /* 禁用所有动画 */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* 移除所有滤镜效果 */
+  .blessing-bg-image,
+  .thanks-bg-image {
+    filter: none !important;
+  }
+  
+  /* 简化装饰元素 */
+  .decorative-elements,
+  .invitation-decorations,
+  .story-decorations,
+  .location-decorations,
+  .blessing-decorations,
+  .thanks-decorations {
+    display: none !important;
+  }
+  
+  /* 简化源漫元素 */
+  .romantic-elements,
+  .travel-elements,
+  .wish-elements,
+  .gratitude-elements {
+    display: none !important;
+  }
+  
+  /* 移除backdrop-filter */
+  .date-card,
+  .invitation-content {
+    backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  /* 简化阴影效果 */
+  .main-title,
+  .couple-main,
+  .photo-title {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+  }
+}
+
+/* 超低端设备特殊优化 */
+@media (max-width: 375px) {
+  /* 移除所有GPU加速 */
+  * {
+    transform: none !important;
+    -webkit-transform: none !important;
+    will-change: auto !important;
+  }
+  
+  /* 简化字体效果 */
+  .main-title,
+  .couple-main {
+    font-family: sans-serif !important;
+  }
+}
+
+/* ====== 首页操作提示和分享按钮样式 ====== */
+
+/* 操作提示区域 */
+.operation-hints {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+  opacity: 0;
+  transform: translateY(30rpx);
+  transition: all 0.8s ease 2s;
+}
+
+.operation-hints.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 提示项目 */
+.hint-item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15rpx 25rpx;
+  border-radius: 25rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10rpx);
+  transition: all 0.3s ease;
+}
+
+.hint-item:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hint-icon {
+  font-size: 24rpx;
+}
+
+.hint-text {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1rpx 1rpx 3rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 主要分享按钮 - 放在首页明显位置 */
+.main-share-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: white;
+  font-size: 28rpx;
+  font-weight: bold;
+  padding: 20rpx 40rpx;
+  border-radius: 50rpx;
+  border: none;
+  box-shadow: 0 8rpx 25rpx rgba(255, 107, 107, 0.4);
+  transition: all 0.3s ease;
+  min-width: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15rpx;
+  margin-top: 15rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.main-share-btn:active {
+  transform: translateY(2rpx) scale(0.98);
+  box-shadow: 0 6rpx 20rpx rgba(255, 107, 107, 0.5);
+  background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
+}
+
+.share-icon {
+  font-size: 32rpx;
+}
+
+.share-text {
+  font-size: 28rpx;
+  font-weight: bold;
+  text-shadow: 1rpx 1rpx 3rpx rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式适配 - 小屏幕下的操作提示和分享按钮 */
+@media (max-width: 750rpx) {
+  .operation-hints {
+    gap: 15rpx;
+    margin-bottom: 30rpx;
+  }
+  
+  .hint-item {
+    padding: 12rpx 20rpx;
+  }
+  
+  .hint-text {
+    font-size: 20rpx;
+  }
+  
+  .main-share-btn {
+    font-size: 26rpx;
+    padding: 18rpx 35rpx;
+    min-width: 180rpx;
+  }
+  
+  .share-icon {
+    font-size: 28rpx;
+  }
+  
+  .share-text {
+    font-size: 26rpx;
+  }
+}
+
+/* 低端设备下简化效果 */
+@media (max-width: 750px), (max-height: 1334px) {
+  .operation-hints {
+    transition: none !important;
+  }
+  
+  .hint-item {
+    backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  .main-share-btn {
+    box-shadow: 0 4rpx 15rpx rgba(255, 107, 107, 0.3) !important;
+  }
+}
+
+/* 滚动指示器样式 */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  opacity: 0;
+  transform: translateY(20rpx);
+  transition: all 0.8s ease 3s;
+}
+
+.scroll-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+.scroll-line {
+  width: 2rpx;
+  height: 30rpx;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), transparent);
+}
+
+.scroll-text {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1rpx 1rpx 3rpx rgba(0, 0, 0, 0.5);
+}
+
+@keyframes scrollPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
